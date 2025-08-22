@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust - A Creative Travel Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #F8F4E3; color: #3D3522; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .hero-bg { background-image: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; position: relative; }
+        .hero-overlay { background-color: rgba(0, 70, 70, 0.6); position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+        .nav-link { position: relative; transition: color 0.3s; }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 50%; transform: translateX(-50%); background-color: #FFD700; transition: width 0.4s ease-in-out; }
+        .nav-link:hover::after { width: 100%; }
+        .card { transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        .reveal-text { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .reveal-text.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <header class="fixed w-full top-0 z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="{% url 'home' %}" class="text-3xl font-bold font-serif text-white">Wanderlust.</a>
+            <nav class="hidden md:flex items-center space-x-8">
+    <a href="{% url 'home' %}" class="nav-link text-white font-medium">Home</a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'create_post' %}" class="nav-link text-white font-medium">Create Post</a>
+        <form action="{% url 'logout' %}" method="post" class="inline">
+            {% csrf_token %}
+            <button type="submit" class="nav-link text-white font-medium">Logout</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}" class="nav-link text-white font-medium">Login</a>
+        <a href="{% url 'register' %}" class="bg-white text-teal-800 rounded-full px-5 py-2 font-semibold hover:bg-yellow-300 transition-colors shadow-lg">Register</a>
+    {% endif %}
+</nav>
+            <button id="mobile-menu-button" class="md:hidden text-white">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-white/90 backdrop-blur-md">
+             <a href="{% url 'home' %}" class="block text-teal-800 py-3 px-6 text-center font-semibold">Home</a>
+             <a href="{% url 'content_post' %}" class="block text-teal-800 py-3 px-6 text-center font-semibold">Create Post</a>
+             <a href="/admin" class="block text-teal-800 py-3 px-6 text-center font-semibold">Admin Login</a>
+        </div>
+    </header>
+
+    <section class="hero-bg min-h-screen flex items-center justify-center text-white pt-20">
+        <div class="hero-overlay"></div>
+        <div class="container mx-auto px-6 text-center z-10">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-black font-serif leading-tight reveal-text">Where Your Journey Begins.</h1>
+            <p class="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-gray-200 reveal-text" style="transition-delay: 200ms;">
+                A collection of stories and guides, powered by Django.
+            </p>
+            <div class="mt-10 reveal-text" style="transition-delay: 400ms;">
+                <a href="{% url 'content_post' %}" class="bg-yellow-400 text-gray-900 rounded-full px-10 py-4 font-bold text-lg hover:bg-yellow-300 transition-transform hover:scale-105 duration-300 shadow-xl">Start Writing</a>
+            </div>
+        </div>
+    </section>
+
+    <main class="container mx-auto px-6 py-20">
+        
+        {% if posts %}
+<section class="mb-24 reveal-text">
+    <h2 class="text-4xl font-bold font-serif text-center mb-12">Featured Story</h2>
+    <div class="bg-white rounded-2xl shadow-2xl ...">
+        <img src="https://picsum.photos/seed/{{ posts.0.pk }}/800/600" ...>
+        <div class="p-8 md:p-12">
+            <span class="text-sm font-semibold text-teal-600">LATEST POST</span>
+            
+            <a href="{% url 'post_detail' posts.0.pk %}">
+                <h3 class="text-3xl font-bold font-serif mt-2 mb-4 hover:text-teal-600 transition">
+                    {{ posts.0.topic }}
+                </h3>
+            </a>
+            
+            <p class="text-gray-600 mb-6">{{ posts.0.context|truncatewords:40 }}</p>
+            <a href="{% url 'post_update' posts.0.pk %}" ...>Edit This Post &rarr;</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+        <section>
+            <h2 class="text-4xl font-bold font-serif text-center mb-12 reveal-text">Latest Dispatches</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                {% for post in posts %}
+                <div class="card bg-white rounded-2xl shadow-lg overflow-hidden reveal-text">
+                    <img src="https://picsum.photos/seed/{{ post.pk }}/600/400" alt="Post image" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <span class="text-sm font-semibold text-teal-600">
+                            {% if post.updated_at != post.created_at %}
+                                Updated on {{ post.updated_at|date:"M d, Y, P" }}
+                            {% else %}
+                                Posted on {{ post.created_at|date:"M d, Y, P" }}
+                            {% endif %}
+                        </span>
+                        <span class="text-sm font-semibold text-teal-600">
+                            By {{ post.author.username }}
+                            ...
+                        </span>
+                        <a href="{% url 'post_detail' post.pk %}">
+    <h3 class="text-2xl font-bold font-serif mt-2 mb-3 hover:text-teal-600 transition-colors">
+        {{ post.topic }}
+    </h3>
+</a>
+<p class="text-gray-600 mb-4">{{ post.context|truncatewords:20 }}</p>
+                        <div class="mt-4 flex items-center space-x-3">
+                            <a href="{% url 'post_update' post.pk %}" class="font-bold text-teal-700 hover:text-yellow-500 transition-colors">Edit &rarr;</a>
+                             <form method="POST" action="{% url 'post_delete' post.pk %}" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                {% csrf_token %}
+                                <button type="submit" class="font-bold text-red-500 hover:text-red-700 transition-colors">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="md:col-span-2 lg:col-span-3 text-center py-12">
+                     <h3 class="text-2xl font-semibold text-gray-500">No posts yet.</h3>
+                     <p class="text-gray-400 mt-2">Be the first to share your story!</p>
+                     <a href="{% url 'content_post' %}" class="mt-6 inline-block bg-yellow-400 text-gray-900 rounded-full px-8 py-3 font-bold text-lg hover:bg-yellow-300 transition-transform hover:scale-105 duration-300 shadow-lg">Create a Post</a>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-teal-900 text-white mt-20">
+        <div class="container mx-auto px-6 py-12">
+            <div class="text-center text-teal-300 border-t border-teal-700 mt-10 pt-6">
+                &copy; {% now "Y" %} Wanderlust.  by Team-HURRICANE.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- Navbar Scroll Effect ---
+        const navbar = document.getElementById('navbar');
+        window.onscroll = () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add("bg-white/90", "shadow-md", "backdrop-blur-md");
+                navbar.querySelectorAll('.nav-link, .text-3xl').forEach(el => { el.classList.remove('text-white'); el.classList.add('text-teal-800'); });
+            } else {
+                navbar.classList.remove("bg-white/90", "shadow-md", "backdrop-blur-md");
+                navbar.querySelectorAll('.nav-link, .text-3xl').forEach(el => { el.classList.add('text-white'); el.classList.remove('text-teal-800'); });
+            }
+        };
+
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+
+        // --- Scroll Reveal Animation ---
+        const revealElements = document.querySelectorAll('.reveal-text');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) { entry.target.classList.add('visible'); }
+            });
+        }, { threshold: 0.1 });
+        revealElements.forEach(el => { observer.observe(el); });
+    </script>
+</body>
+</html>

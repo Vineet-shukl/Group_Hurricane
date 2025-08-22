@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a New Post</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for a more vibrant look */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #6366f1, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Glassmorphism effect for the form */
+        .glass-form {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        /* Button styling and animation */
+        .animated-button {
+            background-image: linear-gradient(to right, #6366f1 0%, #a855f7 51%, #6366f1 100%);
+            background-size: 200% auto;
+            transition: background-position 0.5s;
+        }
+        .animated-button:hover {
+            background-position: right center;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Main Container -->
+    <div class="container mx-auto p-4 md:p-8 max-w-2xl">
+
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-5xl font-bold gradient-text">Create a Post</h1>
+            <p class="text-gray-700 mt-3 text-lg">Share your thoughts with the world.</p>
+        </header>
+
+        <!-- Post Creation Form -->
+        <section>
+            <form method="POST" action="" class="glass-form p-6 rounded-xl shadow-lg">
+                <!-- Django's CSRF token is still essential! -->
+                {% csrf_token %}
+                
+                <div class="space-y-5">
+                    <div>
+                        <label for="{{ form.topic.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900">Topic</label>
+                        <!-- Django will render the <input> with the correct classes -->
+                        {{ form.topic }}
+                    </div>
+                    <div>
+                        <label for="{{ form.context.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900">Context</label>
+                        <!-- Django will render the <textarea> -->
+                        {{ form.context }}
+                    </div>
+                </div>
+                
+                <button type="submit" class="mt-6 w-full animated-button text-white font-semibold py-3 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Publish Post
+                </button>
+            </form>
+        </section>
+
+    </div>
+</body>
+</html>

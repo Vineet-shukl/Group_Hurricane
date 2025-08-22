@@ -1,0 +1,8 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+  <h2>{{ post.title }}</h2>
+  <p>by {{ post.author }} on {{ post.created_on }}</p>
+  <hr>
+  <p>{{ post.content|linebreaksbr }}</p>
+{% endblock %}
