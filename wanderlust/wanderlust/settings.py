@@ -122,3 +122,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'home'
+import os
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
