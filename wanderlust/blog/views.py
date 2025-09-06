@@ -7,6 +7,7 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
+from django.contrib.auth import logout
 
 def blog_index(request):
     return render(request=request, template_name="blog_index.html")
@@ -93,3 +94,8 @@ def register(request):
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'post_detail.html', {'post': post})
+
+def custom_logout(request):
+    logout(request)
+    return render(request, 'logout.html')
+
