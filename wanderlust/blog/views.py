@@ -48,6 +48,8 @@ def post_update(request, pk):
     View to handle editing an existing post.
     """
     post = get_object_or_404(Post, pk=pk) # Get the specific post or show a 404 error
+    if request.user != post.author:
+        return HttpResponseForbidden("You are not allowed to edit this post.Only author can perform action")
     if request.method == 'POST':
         # Populate the form with submitted data AND the existing post instance
         form = PostForm(request.POST, instance=post)
@@ -67,6 +69,8 @@ def post_delete(request, pk):
     View to handle deleting a post.
     """
     post = get_object_or_404(Post, pk=pk)
+    if request.user != post.author:
+        return HttpResponseForbidden("You are not allowed to delete this post.Only author can perform action")
     if request.method == 'POST': # Only process if the form was submitted
         post.delete()
         return redirect('home')
