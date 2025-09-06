@@ -1,6 +1,6 @@
 
 from django.urls import path
-from .views import blog_index, get_post,create_post,content_post,home,post_update,post_delete,register, post_detail
+from .views import blog_index, get_post,create_post,content_post,home,post_update,post_delete,register, post_detail,custom_logout
 
 urlpatterns = [
     path('',home, name='home'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('register/',register, name='register'),
     path('post/<int:pk>/',post_detail, name='post_detail'),
     path('create/', content_post, name='create_post'),
+    path('logout/',custom_logout , name='custom_logout'),
    ]
