@@ -5,7 +5,8 @@ from blog.models import Posts
 from .models import Post # Make sure Post is imported
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required 
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 
 def blog_index(request):
     return render(request=request, template_name="blog_index.html")
