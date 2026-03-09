@@ -1,42 +1,32 @@
-from django.shortcuts import render,redirect,get_object_or_404 
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PostForm
-from django.http import HttpResponse
 from blog.models import Posts
-from .models import Post # Make sure Post is imported
+from .models import Post
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.contrib.auth import logout
 
-def blog_index(request):
+def blog_landing(request):
     return render(request=request, template_name="blog_index.html")
-def get_post(request):
-    all_posts = Posts.objects.all()
-    return render(request=request,template_name='posts.html',context={'posts':all_posts})
-def create_post(request):
-    print("Test",dir(request))
-    title=request.POST.get('title')
-    content=request.POST.get('content')
-    return render(request=request, template_name='new_post.html')
+
+def list_posts(request):
+    posts = Posts.objects.all()
+    return render(request=request, template_name='posts.html', context={'posts': posts})
+
 def home(request):
-    posts = Post.objects.all().order_by('-created_at') # Get all posts, newest first
+    posts = Post.objects.all().order_by('-created_at')
     return render(request, 'home.html', {'posts': posts})
-# Create your views here.
+
 @login_required
-def content_post(request):
+def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
-            # Create a post object but DON'T save it to the database yet
             post = form.save(commit=False)
-            
-            # Assign the current logged-in user to the author field
             post.author = request.user
-            
-            # Now, save the post to the database with the author included
             post.save()
-            
             return redirect('home')
     else:
         form = PostForm()
